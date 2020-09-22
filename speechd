@@ -8,6 +8,11 @@ load $servers_dir/linux-speechd/tclspeechd.so
 tts_initialize
 
 
+proc tts_say {text} {
+    say $text
+}
+
+
 proc s {} {
     stop
     queue_clear

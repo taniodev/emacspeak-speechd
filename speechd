@@ -1,0 +1,17 @@
+#!/usr/bin/env tclsh
+
+package require Tclx
+
+set servers_dir [file dirname $argv0]
+source $servers_dir/tts-lib.tcl
+load $servers_dir/linux-speechd/tclspeechd.so
+tts_initialize
+
+
+proc s {} {
+    stop
+    queue_clear
+}
+
+
+commandloop

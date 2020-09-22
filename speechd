@@ -8,6 +8,28 @@ load $servers_dir/linux-speechd/tclspeechd.so
 tts_initialize
 
 
+proc d {} {
+    global tts
+
+    loop index 0 [queue_length] {
+        set event [queue_remove]
+        set type [lindex $event 0]
+        set content [lindex $event 1]
+
+        switch $type {
+            s {
+                say $content
+            }
+            a {
+                exec $tts(play) $content > /dev/null &
+            }
+        }
+    }
+
+    return ""
+}
+
+
 proc tts_say {text} {
     say $text
 }

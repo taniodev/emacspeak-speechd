@@ -35,14 +35,19 @@ proc l {character} {
 }
 
 
+proc s {} {
+    stop
+    queue_clear
+}
+
+
 proc tts_say {text} {
     say $text
 }
 
 
-proc s {} {
-    stop
-    queue_clear
+proc tts_set_speech_rate {rate} {
+    set_rate $rate
 }
 
 

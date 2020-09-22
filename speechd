@@ -30,6 +30,11 @@ proc d {} {
 }
 
 
+proc l {character} {
+    say_character $character
+}
+
+
 proc tts_say {text} {
     say $text
 }

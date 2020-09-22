@@ -3,6 +3,7 @@
 #include <tcl.h>
 
 int say(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+int say_character(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 int stop(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 
 extern "C" int Tclspeechd_Init(Tcl_Interp *interp);
@@ -21,6 +22,17 @@ int say(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv
 }
 
 
+int say_character(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
+{
+    if (objc != 2) return TCL_ERROR;
+
+    const char *character = Tcl_GetStringFromObj(objv[1], NULL);
+    spd_char(spdConnection, SPD_MESSAGE, character);
+
+    return TCL_OK;
+}
+
+
 int stop(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     spd_cancel(spdConnection);
@@ -34,6 +46,7 @@ int Tclspeechd_Init(Tcl_Interp *interp)
     spdConnection = spd_open("emacspeak", NULL, NULL, SPD_MODE_SINGLE);
 
     Tcl_CreateObjCommand(interp, "say", say, NULL, NULL);
+    Tcl_CreateObjCommand(interp, "say_character", say_character, NULL, NULL);
     Tcl_CreateObjCommand(interp, "stop", stop, NULL, NULL);
 
     return TCL_OK;

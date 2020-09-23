@@ -41,6 +41,11 @@ proc s {} {
 }
 
 
+proc set_lang {lang {say_it ""}} {
+    set_language $lang
+}
+
+
 proc tts_say {text} {
     say $text
 }

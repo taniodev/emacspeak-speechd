@@ -51,6 +51,11 @@ proc tts_say {text} {
 }
 
 
+proc tts_set_punctuations {punct} {
+    set_punctuation $punct
+}
+
+
 proc tts_set_speech_rate {rate} {
     set_rate $rate
 }

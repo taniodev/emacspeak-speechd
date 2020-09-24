@@ -47,6 +47,9 @@ proc set_lang {lang {say_it ""}} {
 
 
 proc tts_say {text} {
+    # Remove dectalk control codes
+    regsub -all {\[\*\]} $text { } text
+
     say $text
 }
 

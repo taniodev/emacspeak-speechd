@@ -6,6 +6,7 @@ set servers_dir [file dirname $argv0]
 source $servers_dir/tts-lib.tcl
 load $servers_dir/linux-speechd/tclspeechd.so
 tts_initialize
+beep_initialize
 
 
 proc d {} {
@@ -22,6 +23,12 @@ proc d {} {
             }
             a {
                 exec $tts(play) $content > /dev/null &
+            }
+            b {
+                if {$tts(beep)} {
+                    lvarpop event
+                    eval beep $event
+                }
             }
         }
     }
@@ -43,6 +50,11 @@ proc s {} {
 
 proc set_lang {lang {say_it ""}} {
     set_language $lang
+}
+
+
+proc t {{pitch 440} {duration 50}} {
+    b $pitch $duration
 }
 
 

@@ -9,6 +9,7 @@ int say(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv
 int say_character(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 int stop(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 int set_language(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+int set_output_module(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 int set_punctuation(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 int set_rate(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 
@@ -74,6 +75,17 @@ int set_language(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *c
 }
 
 
+int set_output_module(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
+{
+    if (objc != 2) return TCL_ERROR;
+
+    const char *output_module = Tcl_GetStringFromObj(objv[1], NULL);
+    spd_set_output_module(spdConnection, output_module);
+
+    return TCL_OK;
+}
+
+
 int set_punctuation(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     if (objc != 2) return TCL_ERROR;
@@ -118,6 +130,7 @@ int Tclspeechd_Init(Tcl_Interp *interp)
     Tcl_CreateObjCommand(interp, "say_character", say_character, NULL, NULL);
     Tcl_CreateObjCommand(interp, "stop", stop, NULL, NULL);
     Tcl_CreateObjCommand(interp, "set_language", set_language, NULL, NULL);
+    Tcl_CreateObjCommand(interp, "set_output_module", set_output_module, NULL, NULL);
     Tcl_CreateObjCommand(interp, "set_punctuation", set_punctuation, NULL, NULL);
     Tcl_CreateObjCommand(interp, "set_rate", set_rate, NULL, NULL);
 

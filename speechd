@@ -8,6 +8,9 @@ load $servers_dir/linux-speechd/tclspeechd.so
 tts_initialize
 beep_initialize
 
+# Sets the output module that should be used for synthesis
+# set_output_module rhvoice
+
 
 proc d {} {
     global tts

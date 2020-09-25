@@ -12,6 +12,7 @@ int set_language(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *c
 int set_output_module(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 int set_punctuation(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 int set_rate(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+int set_volume(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 
 extern "C" int Tclspeechd_Init(Tcl_Interp *interp);
 
@@ -120,6 +121,23 @@ int set_rate(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const
 }
 
 
+int set_volume(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
+{
+    int volume;
+    if (objc != 2) return TCL_ERROR;
+    Tcl_GetIntFromObj(interp, objv[1], &volume);
+
+    if (volume > 100) {
+        volume = 100;
+    } else if (volume < -100) {
+        volume = -100;
+    }
+
+    spd_set_volume(spdConnection, volume);
+    return TCL_OK;
+}
+
+
 int Tclspeechd_Init(Tcl_Interp *interp)
 {
     spdConnection = spd_open("emacspeak", NULL, NULL, SPD_MODE_SINGLE);
@@ -133,6 +151,7 @@ int Tclspeechd_Init(Tcl_Interp *interp)
     Tcl_CreateObjCommand(interp, "set_output_module", set_output_module, NULL, NULL);
     Tcl_CreateObjCommand(interp, "set_punctuation", set_punctuation, NULL, NULL);
     Tcl_CreateObjCommand(interp, "set_rate", set_rate, NULL, NULL);
+    Tcl_CreateObjCommand(interp, "set_volume", set_volume, NULL, NULL);
 
     return TCL_OK;
 }

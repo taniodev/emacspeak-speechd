@@ -11,6 +11,9 @@ beep_initialize
 # Sets the output module that should be used for synthesis
 # set_output_module rhvoice
 
+# Speech Dispatcher volume (-100 to +100)
+set_volume 80
+
 
 proc d {} {
     global tts

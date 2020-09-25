@@ -58,6 +58,16 @@ proc t {{pitch 440} {duration 50}} {
 }
 
 
+proc tts_pause {} {
+    pause
+}
+
+
+proc tts_resume {} {
+    resume
+}
+
+
 proc tts_say {text} {
     # Remove dectalk control codes
     regsub -all {\[\*\]} $text { } text

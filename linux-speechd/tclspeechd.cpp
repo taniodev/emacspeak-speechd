@@ -3,6 +3,8 @@
 #include <speech-dispatcher/speechd_types.h>
 #include <tcl.h>
 
+int pause(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+int resume(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 int say(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 int say_character(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 int stop(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
@@ -13,6 +15,22 @@ int set_rate(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const
 extern "C" int Tclspeechd_Init(Tcl_Interp *interp);
 
 SPDConnection *spdConnection;
+
+
+int pause(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
+{
+    spd_pause(spdConnection);
+
+    return TCL_OK;
+}
+
+
+int resume(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
+{
+    spd_resume(spdConnection);
+
+    return TCL_OK;
+}
 
 
 int say(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
@@ -94,6 +112,8 @@ int Tclspeechd_Init(Tcl_Interp *interp)
 {
     spdConnection = spd_open("emacspeak", NULL, NULL, SPD_MODE_SINGLE);
 
+    Tcl_CreateObjCommand(interp, "pause", pause, NULL, NULL);
+    Tcl_CreateObjCommand(interp, "resume", resume, NULL, NULL);
     Tcl_CreateObjCommand(interp, "say", say, NULL, NULL);
     Tcl_CreateObjCommand(interp, "say_character", say_character, NULL, NULL);
     Tcl_CreateObjCommand(interp, "stop", stop, NULL, NULL);

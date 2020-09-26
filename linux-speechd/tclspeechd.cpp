@@ -8,6 +8,7 @@ int resume(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const o
 int say(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 int say_character(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 int stop(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+int set_capital_letters(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 int set_language(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 int set_output_module(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 int set_punctuation(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
@@ -60,6 +61,23 @@ int say_character(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *
 int stop(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     spd_cancel(spdConnection);
+
+    return TCL_OK;
+}
+
+
+int set_capital_letters(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
+{
+    if (objc != 2) return TCL_ERROR;
+    const char *type = Tcl_GetStringFromObj(objv[1], NULL);
+
+    if (strcmp(type, "none") == 0) {
+        spd_set_capital_letters(spdConnection, SPD_CAP_NONE);
+    } else if (strcmp(type, "spell") == 0) {
+        spd_set_capital_letters(spdConnection, SPD_CAP_SPELL);
+    } else if (strcmp(type, "icon") == 0) {
+        spd_set_capital_letters(spdConnection, SPD_CAP_ICON);
+    }
 
     return TCL_OK;
 }
@@ -147,6 +165,7 @@ int Tclspeechd_Init(Tcl_Interp *interp)
     Tcl_CreateObjCommand(interp, "say", say, NULL, NULL);
     Tcl_CreateObjCommand(interp, "say_character", say_character, NULL, NULL);
     Tcl_CreateObjCommand(interp, "stop", stop, NULL, NULL);
+    Tcl_CreateObjCommand(interp, "set_capital_letters", set_capital_letters, NULL, NULL);
     Tcl_CreateObjCommand(interp, "set_language", set_language, NULL, NULL);
     Tcl_CreateObjCommand(interp, "set_output_module", set_output_module, NULL, NULL);
     Tcl_CreateObjCommand(interp, "set_punctuation", set_punctuation, NULL, NULL);
